@@ -83,8 +83,9 @@ def test_can_build_huge_xml():
 ## Limitations
 
 - Validation does not apply to stream responses.
-- HTML5 validation uses a hack to ignore errors about invalid tags on
+- Validation of HTML5 uses a hack to ignore errors about invalid tags on
   sectioning elements like `<nav>` or `<article>`.
-- XML validation only checks for well-formedness but does not validate against
-  a schema or DTD. Technically lxml could do all this but would require more
-  setup. If you need such a feature, fill free to submit a pull request.
+- Validation of XML only checks if the document is well-formed but does not
+  validate against a schema or DTD. Technically lxml could do all this but
+  would require more setup. If you need such a feature, fill free to submit a
+  pull request.
