@@ -10,6 +10,20 @@ Internally the validator uses [lxml](https://lxml.de/), so the validation is
 
 This makes it feasible to perform validation while running your test suite.
 
+## Installation
+
+To install, depending on your package manager, run:
+
+```bash
+pip install --update django_html_xml_validator
+```
+
+or
+
+```bash
+poetry add django_html_xml_validator
+```
+
 ## Usage
 
 To add validation to your project, add it to `settings.MIDDLEWARE`. In most
@@ -57,9 +71,9 @@ VALIDATE_HTML = True
 VALIDATE_XML = True
 ```
 
-If you are sure all your HTML pages are actually XHTML (which sadly will be
-the case as soon as your code contains forms based on standard Django forms),
-you can enforce HTML to be validated as XML:
+If you are sure all your HTML pages are actually XHTML (which sadly will not 
+be the case as soon as your code contains forms based on standard Django 
+forms),  you can enforce HTML to be validated as XHTML:
 
 ```python
 VALIDATE_HTML_AS_XHTML = True  # WARNING: Will fail with standard form templates
@@ -87,5 +101,14 @@ def test_can_build_huge_xml():
   sectioning elements like `<nav>` or `<article>`.
 - Validation of XML only checks if the document is well-formed but does not
   validate against a schema or DTD. Technically lxml could do all this but
-  would require more setup. If you need such a feature, fill free to submit a
+  would require more setup. If you need such a feature, feel free to submit a
   pull request.
+
+## License
+
+Copyright (c) 2022 ITELL.SOLUTIONS GmbH, Graz, Austria.
+
+Distributed under the MIT license. For details refer to the file `LICENSE`. 
+
+The source code is available from 
+<https://github.com/itell-solutions/django_html_xml_validator/tree/1-add-validator>.
