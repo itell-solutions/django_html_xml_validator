@@ -17,20 +17,18 @@ exclude = '''
 profile = "black"
 line_length = 120
 default_section = "THIRDPARTY"
-known_first_party = "base,scripts,versdb"
-skip_glob = "venv"
+known_first_party = "django_html_xml_validator"
 
 [tool.poetry]
 name = "django_html_xml_validator"
 version = "0.1.0"
 description = "Django middleware to validate HTML and XML responses"
-authors = ["Thomas Aglassinger <roskakori@users.sourceforge.net>"]
+authors = ["ITELL.SOLUTIONS GmbH"]
 readme = "README.md"
-license = "BSD"
-homepage = "https://github.com/roskakori/pygount"
-repository = "https://github.com/roskakori/pygount.git"
-documentation = "https://pygount.readthedocs.io"
-keywords = ["code analysis", "count", "SLOC"]
+license = "MIT"
+homepage = "https://github.com/itell-solutions/django_html_xml_validator"
+repository = "https://github.com/itell-solutions/django_html_xml_validator.git"
+keywords = ["django", "html", "validate", "xml"]
 classifiers = [
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
