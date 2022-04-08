@@ -13,9 +13,9 @@ Django views using `render()` and Django HTML templates.
 Features:
 
 - **Specific error locations** in case validation finds issues.
-- **Runs locally** without the need to upload your page to an external 
+- **Runs locally** without the need to upload your page to an external
   validation service.
-- **Uses only Python packages** without the need to install external tools 
+- **Uses only Python packages** without the need to install external tools
   from other ecosystems.
 - **Fast** because based on [lxml](https://lxml.de/) and its native components.
 
