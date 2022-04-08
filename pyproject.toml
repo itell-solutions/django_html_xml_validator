@@ -18,6 +18,7 @@ profile = "black"
 line_length = 120
 default_section = "THIRDPARTY"
 known_first_party = "django_html_xml_validator"
+skip_glob = "venv"
 
 [tool.poetry]
 name = "django_html_xml_validator"
