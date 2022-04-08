@@ -1,0 +1,85 @@
+[pycodestyle]
+max-line-length = 120
+
+[tool.black]
+target-version = ['py37']
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+/(
+  \.git
+  | build
+  | dist
+ )/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+default_section = "THIRDPARTY"
+known_first_party = "django_html_xml_validator"
+skip_glob = "venv"
+
+[tool.poetry]
+name = "django_html_xml_validator"
+version = "0.1.0"
+description = "Django middleware to validate HTML and XML responses"
+authors = ["ITELL.SOLUTIONS GmbH"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/itell-solutions/django_html_xml_validator"
+repository = "https://github.com/itell-solutions/django_html_xml_validator.git"
+keywords = ["django", "html", "validate", "xml"]
+classifiers = [
+        "Development Status :: 4 - Beta",
+        "Environment :: Web Environment",
+        "Framework :: Django",
+        "Framework :: Django :: 3",
+        "Framework :: Django :: 4",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+        "Topic :: Software Development",
+        "Topic :: Software Development :: Quality Assurance",
+        "Topic :: Text Processing :: Markup :: HTML",
+        "Topic :: Text Processing :: Markup :: XML",
+]
+packages = [
+    { include = "django_html_xml_validator" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+lxml = "^4"
+Django = ">=3, <5"
+
+[tool.poetry.dev-dependencies]
+wheel = "^0.37.1"
+coverage = "^6.2"
+pre-commit = "^2.16.0"
+pytest = "^7.1.1"
+pytest-django = "^4.5.2"
+pytest-cov = "^3.0.0"
+
+[tool.poetry.urls]
+"Issue Tracker" = "https://github.com/itell-solutions/django_html_xml_validator/issues"
+"Changes" = "https://github.com/itell-solutions/django_html_xml_validator/blob/main/CHANGES.md"
+
+[tool.pytest.ini_options]
+addopts = """\
+    --strict-config
+    --strict-markers
+    """
+django_find_project = false
+DJANGO_SETTINGS_MODULE = "tests.settings"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
