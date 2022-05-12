@@ -22,7 +22,7 @@ skip_glob = "venv"
 
 [tool.poetry]
 name = "django_html_xml_validator"
-version = "0.1.0"
+version = "1.0.0"
 description = "Django middleware to validate HTML and XML responses"
 authors = ["ITELL.SOLUTIONS GmbH"]
 readme = "README.md"
@@ -31,7 +31,7 @@ homepage = "https://github.com/itell-solutions/django_html_xml_validator"
 repository = "https://github.com/itell-solutions/django_html_xml_validator.git"
 keywords = ["django", "html", "validate", "xml"]
 classifiers = [
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Django",
         "Framework :: Django :: 3",
