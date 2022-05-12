@@ -26,16 +26,16 @@ To get started with the project perform the following steps:
    poetry run pytest
    ```
 
-You can edit the source code with any text editor. Additional the project
+You can edit the source code with any text editor. Additionally, the project
 already contains everything needed to open it in PyCharm.
 
-To check the test coverage run
+To check the test coverage, run
 
 ```bash
 poetry run pytest --cov django_html_xml_validator --cov-report html
 ```
 
-and open `htmlcov/index.html` in your web browser.
+and then open `htmlcov/index.html` in your web browser.
 
 ## Publish a new release
 
@@ -64,5 +64,7 @@ The following steps are only possible if you have a proper PyPI token set up.
 6. Add a tag matching the version of the release:
    ```bash
    git tag -a -m "Tagged v1.x.x." v1.x.x
+   git push origin --tags
    ```
-7. Close the release milestone.
+7. Close the related release
+   [milestone](https://github.com/itell-solutions/django_html_xml_validator/milestones).
