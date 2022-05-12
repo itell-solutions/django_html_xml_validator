@@ -13,7 +13,9 @@ from lxml.etree import ParseError
 _HTML5_BYTES_PATTERN = rb"^\s*<\s*!doctype\s+html>"
 _HTML5_BYTES_REGEX = re.compile(_HTML5_BYTES_PATTERN, re.IGNORECASE)
 _HTML5_REGEX = re.compile(_HTML5_BYTES_PATTERN.decode("ascii"), re.IGNORECASE)
-_HTML5_INVALID_TAG_TO_IGNORE_REGEX = re.compile(r"^Tag (article|aside|footer|header|main|nav|section) invalid$")
+_HTML5_INVALID_TAG_TO_IGNORE_REGEX = re.compile(
+    r"^Tag (article|aside|details|figure|figcaption|footer|header|main|mark|nav|section|summary|time) invalid$"
+)
 
 
 class _ContentKind(Enum):
