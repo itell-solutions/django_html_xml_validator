@@ -57,6 +57,39 @@ class HtmlXmlValidatorMiddlewareTest(SimpleTestCase):
         response = self.middleware(self.request)
         assert response.status_code == HTTPStatus.OK
 
+    @override_settings(VALIDATE_HTML=True)
+    def test_can_accept_semantic_html(self):
+        self.response = HttpResponse(
+            "\n".join(
+                [
+                    "<!DOCTYPE html>",
+                    '<html lang="en">',
+                    "  <head><title>HTML5 example</title></head>",
+                    "  <body>",
+                    "    <header><nav>Some links here.</nav></header>",
+                    "    <article>",
+                    "      <section>First</section>",
+                    "      <section>Second</section>",
+                    "      <section>",
+                    "        <figure>",
+                    '          <img alt="example" src="example.png">',
+                    "          <figcaption>Example</figcaption>",
+                    "        </figure>",
+                    "        <details>",
+                    "          <summary>short</summary>",
+                    "          <p>the long version with <mark>highlighted part</mark></p>" "        </details>",
+                    "        <time>10:00</time>",
+                    "      </section>",
+                    "    </article>",
+                    "    <footer>Copyright etc</footer>",
+                    "  </body>",
+                    "</html>",
+                ]
+            )
+        )
+        response = self.middleware(self.request)
+        assert response.status_code == HTTPStatus.OK
+
     def test_can_accept_invalid_html_without_validation(self):
         self.response = HttpResponse("<head></body>")
         response = self.middleware(self.request)

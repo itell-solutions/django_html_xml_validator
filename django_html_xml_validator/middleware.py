@@ -10,10 +10,14 @@ from django.http import HttpRequest, HttpResponse
 from lxml import etree
 from lxml.etree import ParseError
 
+from . import __version__
+
 _HTML5_BYTES_PATTERN = rb"^\s*<\s*!doctype\s+html>"
 _HTML5_BYTES_REGEX = re.compile(_HTML5_BYTES_PATTERN, re.IGNORECASE)
 _HTML5_REGEX = re.compile(_HTML5_BYTES_PATTERN.decode("ascii"), re.IGNORECASE)
-_HTML5_INVALID_TAG_TO_IGNORE_REGEX = re.compile(r"^Tag (article|aside|footer|header|main|nav|section) invalid$")
+_HTML5_INVALID_TAG_TO_IGNORE_REGEX = re.compile(
+    r"^Tag (article|aside|details|figure|figcaption|footer|header|main|mark|nav|section|summary|time) invalid$"
+)
 
 
 class _ContentKind(Enum):
@@ -96,7 +100,7 @@ class HtmlXmlValidatorMiddleware:
 
     @staticmethod
     def _cleaned_errors(parser: Union[etree.HTMLParser, etree.XMLParser], is_html5: bool) -> List:
-        # HACK: Filter spurious HTML5 errors for actually valid tags.
+        # HACK: Filter spurious HTML5 errors caused by libxml2 not knowing about them.
         return [
             error
             for error in parser.error_log.filter_from_warnings()
@@ -111,10 +115,28 @@ class HtmlXmlValidatorMiddleware:
             (
                 "<!DOCTYPE html>",
                 "<html lang='en'>",
-                f"<head><title>{markup_language} Validation Error</title></head>",
+                "<head>",
+                f"<title>{markup_language} Validation Error</title>",
+                "<style>",
+                "a {color: #845422;}",
+                "body {background: white; color: black;}",
+                "body, footer, h1 {margin: 0;}",
+                "footer {",
+                "  padding: 8px 30px; background: #ead61c; color: black; ",
+                "  position: fixed; width: 100%; bottom: 0;",
+                "}",
+                "h1 {padding: 30px; background: #ead61c; color: black;}",
+                "p, pre {padding: 8px; margin: 12px;}",
+                "pre {background: #d7c797; border-radius: 8px;}",
+                "</style>",
+                "</head>",
                 "<body>",
                 f"<h1>{markup_language} Validation Error</h1>",
                 error_log_html,
+                (
+                    '<footer><a href="https://github.com/itell-solutions/django_html_xml_validator">'
+                    f"django_html_xml_validator</a>, version {__version__}.</footer>"
+                ),
                 "</body>",
                 "</html>",
             )
