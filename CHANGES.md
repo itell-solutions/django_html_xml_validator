@@ -1,8 +1,9 @@
 # Changes
 
-## Version 1.0.0, 2022-05-12
+## Version 1.0.0, 2022-05-13
 
 - Fixed missing HTML5 semantic elements.
+- Improved visual design of error page.
 - Changed development status to "Production/Stable".
 - Updated development packages to current versions.
 - Cleaned up documentation.
