@@ -1,4 +1,4 @@
-from django.http import HttpRequest[![PyPI](https://img.shields.io/pypi/v/django_html_xml_validator)](https://pypi.org/project/django_html_xml_validator/)
+[![PyPI](https://img.shields.io/pypi/v/django_html_xml_validator)](https://pypi.org/project/django_html_xml_validator/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/django_html_xml_validator.svg)](https://www.python.org/downloads/)
 [![Build Status](https://github.com/itell-solutions/django_html_xml_validator/actions/workflows/build.yaml/badge.svg)](https://github.com/itell-solutions/django_html_xml_validator/actions/workflows/build.yaml)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
