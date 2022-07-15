@@ -4,7 +4,10 @@ from http import HTTPStatus
 from django.http import HttpRequest, HttpResponse, StreamingHttpResponse
 from django.test import RequestFactory, SimpleTestCase, override_settings
 
-from django_html_xml_validator.middleware import HtmlXmlValidatorMiddleware, error_line_html
+from django_html_xml_validator.decorators import add_no_html_xml_validation_header, no_html_xml_validation
+from django_html_xml_validator.middleware import VALIDATION_HEADER, HtmlXmlValidatorMiddleware, error_line_html
+
+_BROKEN_HTML = "<head></body>"
 
 
 @dataclass
@@ -91,7 +94,7 @@ class HtmlXmlValidatorMiddlewareTest(SimpleTestCase):
         assert response.status_code == HTTPStatus.OK
 
     def test_can_accept_invalid_html_without_validation(self):
-        self.response = HttpResponse("<head></body>")
+        self.response = _broken_html_response()
         response = self.middleware(self.request)
         assert response.status_code == HTTPStatus.OK
 
@@ -101,16 +104,30 @@ class HtmlXmlValidatorMiddlewareTest(SimpleTestCase):
         response = self.middleware(self.request)
         assert response.status_code == HTTPStatus.OK
 
+    @override_settings(VALIDATE_XML=True)
+    def test_can_accept_invalid_html_with_no_validation_header(self):
+        self.response = _broken_html_response()
+        add_no_html_xml_validation_header(self.response)
+        response = self.middleware(self.request)
+        assert response.status_code == HTTPStatus.OK
+        assert response.headers.get(VALIDATION_HEADER) == "0"
+
+    @override_settings(VALIDATE_XML=True)
+    def test_can_accept_invalid_html_with_no_validation_decorator(self):
+        response = _broken_html_view(HttpRequest())
+        assert response.status_code == HTTPStatus.OK
+        assert response.headers.get(VALIDATION_HEADER) == "0"
+
     @override_settings(VALIDATE_HTML=True)
     def test_fails_on_invalid_html(self):
-        self.response = HttpResponse("<head></body>")
+        self.response = _broken_html_response()
         response = self.middleware(self.request)
         assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
         assert "HTML Validation Error" in _html_from(response)
 
     @override_settings(DEBUG=True)
     def test_fails_on_invalid_html_on_debug(self):
-        self.response = HttpResponse("<head></body>")
+        self.response = _broken_html_response()
         response = self.middleware(self.request)
         assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
         assert "HTML Validation Error" in _html_from(response)
@@ -125,3 +142,12 @@ class HtmlXmlValidatorMiddlewareTest(SimpleTestCase):
 
 def _html_from(response: HttpResponse) -> str:
     return response.content.decode(response.charset)
+
+
+def _broken_html_response():
+    return HttpResponse(_BROKEN_HTML)
+
+
+@no_html_xml_validation
+def _broken_html_view(_request: HttpRequest) -> HttpResponse:
+    return _broken_html_response()

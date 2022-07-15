@@ -118,6 +118,38 @@ def test_can_build_huge_xml():
     ...
 ```
 
+## Disabling validation for specific views
+
+Sometimes a Django extension or external data to be rendered as part of one of
+your view produce invalid HTML. The proper solution of course is to fix the
+extension (for example by submitting a pull request with your fix) or cleaning
+up the external HTML.
+
+This might however have a negative impact on your project's schedule and for
+the time being a quick workaround is needed. You could of course disable
+validation for the entire project, but then in turn would lose confidence in
+the general quality of your project's HTML.
+
+To disable validation for a specific view only, use the
+`@no_html_xml_validation` decorator, for example:
+
+```python
+from django.http import HttpRequest, HttpResponse
+from django_html_xml_validator.decorators import no_html_xml_validation
+
+@no_html_xml_validation
+def broken_html_view(_request: HttpRequest) -> HttpResponse:
+    return HttpResponse("<head></body>")
+```
+
+Internally this adds an HTTP header, which you can for example use to
+collect quality assurance statistics about how many HTTP responses contain
+such a header to evaluate the technical debt of your project.
+
+```
+X-Django-HTML-XML-Validation: 0
+```
+
 ## Limitations
 
 - Validation does not apply to stream responses.

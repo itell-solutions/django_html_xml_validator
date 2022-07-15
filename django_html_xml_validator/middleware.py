@@ -12,6 +12,8 @@ from lxml.etree import ParseError
 
 from . import __version__
 
+VALIDATION_HEADER = "X-Django-HTML-XML-Validation"
+
 _HTML5_BYTES_PATTERN = rb"^\s*<\s*!doctype\s+html>"
 _HTML5_BYTES_REGEX = re.compile(_HTML5_BYTES_PATTERN, re.IGNORECASE)
 _HTML5_REGEX = re.compile(_HTML5_BYTES_PATTERN.decode("ascii"), re.IGNORECASE)
@@ -52,12 +54,14 @@ class HtmlXmlValidatorMiddleware:
             is_validate_html = getattr(settings, "VALIDATE_HTML", is_debug)
             is_validate_xml = getattr(settings, "VALIDATE_XML", is_debug)
             if is_validate_html or is_validate_xml:
-                content_kind = _ContentKind.from_response(response)
-                if response.status_code == HTTPStatus.OK and (
-                    (is_validate_html and content_kind in [_ContentKind.HTML, _ContentKind.XHTML])
-                    or (is_validate_xml and content_kind == _ContentKind.XML)
-                ):
-                    response = self._validated_response(response, content_kind)
+                has_to_skip_validation = str(response.headers.get(VALIDATION_HEADER, "1")) == "0"
+                if not has_to_skip_validation:
+                    content_kind = _ContentKind.from_response(response)
+                    if response.status_code == HTTPStatus.OK and (
+                        (is_validate_html and content_kind in [_ContentKind.HTML, _ContentKind.XHTML])
+                        or (is_validate_xml and content_kind == _ContentKind.XML)
+                    ):
+                        response = self._validated_response(response, content_kind)
         return response
 
     @staticmethod
