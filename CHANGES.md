@@ -1,5 +1,9 @@
 # Changes
 
+## Version 1.1.0, 2022-07-18
+
+- Add decorator to skip validation for selected views.
+
 ## Version 1.0.0, 2022-05-13
 
 - Fixed missing HTML5 semantic elements.
