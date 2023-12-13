@@ -11,12 +11,15 @@ To get started with the project perform the following steps:
    ```bash
    git clone https://github.com/itell-solutions/django_html_xml_validator.git
    ```
-2. Install [pre-commit](https://pre-commit.com/).
-3. Activate pre-commit:
+2. Install [poetry](https://python-poetry.org/).
+3. Install the project:
+   ```bash
+   poetry install
+   ```
+4. Activate [pre-commit](https://pre-commit.com/):
    ```bash
    pre-commit install --install-hooks
    ```
-4. Install [poetry](https://python-poetry.org/).
 5. Build the project (to put everything in place):
    ```bash
    poetry build

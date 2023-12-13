@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from html import escape as html_escaped
 from http import HTTPStatus
-from typing import Callable, List, Union
+from typing import Callable, Union
 
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
@@ -103,7 +103,7 @@ class HtmlXmlValidatorMiddleware:
         return response.content.decode(response.charset)
 
     @staticmethod
-    def _cleaned_errors(parser: Union[etree.HTMLParser, etree.XMLParser], is_html5: bool) -> List:
+    def _cleaned_errors(parser: Union[etree.HTMLParser, etree.XMLParser], is_html5: bool) -> list:
         # HACK: Filter spurious HTML5 errors caused by libxml2 not knowing about them.
         return [
             error
@@ -112,7 +112,7 @@ class HtmlXmlValidatorMiddleware:
         ]
 
     @staticmethod
-    def _errors_html(markup_language: str, content_text: str, errors: List) -> str:
+    def _errors_html(markup_language: str, content_text: str, errors: list) -> str:
         content_lines = content_text.split("\n")
         error_log_html = "".join(error_line_html(error, content_lines) for error in errors)
         return "".join(
@@ -147,7 +147,7 @@ class HtmlXmlValidatorMiddleware:
         )
 
 
-def error_line_html(error, content_lines: List[str]) -> str:
+def error_line_html(error, content_lines: list[str]) -> str:
     if error.line:
         content_line = content_lines[error.line - 1]
         content_line_without_leading_white_space = content_line.lstrip()

@@ -1,3 +1,3 @@
-import pkg_resources
+from importlib_metadata import version
 
-__version__ = pkg_resources.get_distribution(__name__).version
+__version__ = version("django_html_xml_validator")

@@ -1,5 +1,9 @@
 # Changes
 
+## Version 1.2.0, 2023-12-xx
+
+- Drop Python 3.7 and 3.8
+
 ## Version 1.1.0, 2022-07-18
 
 - Add decorator to skip validation for selected views.

@@ -2,7 +2,7 @@
 max-line-length = 120
 
 [tool.black]
-target-version = ['py37']
+target-version = ['py39']
 line-length = 120
 include = '\.pyi?$'
 exclude = '''
@@ -22,7 +22,7 @@ skip_glob = "venv"
 
 [tool.poetry]
 name = "django_html_xml_validator"
-version = "1.1.0"
+version = "1.2.0"
 description = "Django middleware to validate HTML and XML responses"
 authors = ["ITELL.SOLUTIONS GmbH"]
 readme = "README.md"
@@ -41,10 +41,10 @@ classifiers = [
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
         "Topic :: Software Development",
         "Topic :: Software Development :: Quality Assurance",
@@ -56,21 +56,23 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.9"
 lxml = "^4"
 Django = ">=3, <5"
+importlib-metadata = "^7.0.0"
 
-[tool.poetry.dev-dependencies]
-wheel = "^0.37.1"
-coverage = "^6.2"
-pre-commit = "^2.16.0"
+[tool.poetry.group.dev.dependencies]
+wheel = "^0.42.0"
+coverage = "^7.3.2"
+pre-commit = "^3.6.0"
 pytest = "^7.1.1"
-pytest-django = "^4.5.2"
-pytest-cov = "^3.0.0"
+pytest-django = "^4.7.0"
+pytest-cov = "^4.1.0"
 
 [tool.poetry.urls]
 "Issue Tracker" = "https://github.com/itell-solutions/django_html_xml_validator/issues"
 "Changes" = "https://github.com/itell-solutions/django_html_xml_validator/blob/main/CHANGES.md"
+
 
 [tool.pytest.ini_options]
 addopts = """\
@@ -81,5 +83,5 @@ django_find_project = false
 DJANGO_SETTINGS_MODULE = "tests.settings"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.7.0"]
 build-backend = "poetry.core.masonry.api"
