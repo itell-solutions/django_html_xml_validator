@@ -80,11 +80,72 @@ class HtmlXmlValidatorMiddlewareTest(SimpleTestCase):
                     "        </figure>",
                     "        <details>",
                     "          <summary>short</summary>",
-                    "          <p>the long version with <mark>highlighted part</mark></p>" "        </details>",
+                    "          <p>the long version with <mark>highlighted part</mark></p>",
+                    "        </details>",
                     "        <time>10:00</time>",
                     "      </section>",
                     "    </article>",
                     "    <footer>Copyright etc</footer>",
+                    "  </body>",
+                    "</html>",
+                ]
+            )
+        )
+        response = self.middleware(self.request)
+        assert response.status_code == HTTPStatus.OK
+
+    @override_settings(VALIDATE_HTML=True)
+    def test_can_accept_math_ml_html(self):
+        self.response = HttpResponse(
+            "\n".join(
+                [
+                    "<!DOCTYPE html>",
+                    '<html lang="en">',
+                    "  <head><title>HTML5 example</title></head>",
+                    "  <body>",
+                    "    <math>",
+                    "       <msup><mi>a</mi><mn>2</mn></msup>",
+                    "    </math>",
+                    "  </body>",
+                    "</html>",
+                ]
+            )
+        )
+        response = self.middleware(self.request)
+        assert response.status_code == HTTPStatus.OK
+
+    @override_settings(VALIDATE_HTML=True)
+    def test_can_accept_svg_html(self):
+        self.response = HttpResponse(
+            "\n".join(
+                [
+                    "<!DOCTYPE html>",
+                    '<html lang="en">',
+                    "  <head><title>HTML5 example</title></head>",
+                    "  <body>",
+                    "    <svg height='100' width='100'>",
+                    "      <circle cx='50' cy='50' r='40' />",
+                    "    </svg>",
+                    "  </body>",
+                    "</html>",
+                ]
+            )
+        )
+        response = self.middleware(self.request)
+        assert response.status_code == HTTPStatus.OK
+
+    @override_settings(VALIDATE_HTML=True)
+    def test_can_accept_upper_and_lower_case_tags(self):
+        self.response = HttpResponse(
+            "\n".join(
+                [
+                    "<!DOCTYPE html>",
+                    '<html lang="en">',
+                    "  <head><title>HTML5 example</title></head>",
+                    "  <body>",
+                    "    <sVg height='100' width='100'>",
+                    "      <CiRcLe cx='50' cy='50' r='40' />",
+                    "    </SvG>",
                     "  </body>",
                     "</html>",
                 ]

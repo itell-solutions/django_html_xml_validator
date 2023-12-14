@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from html import escape as html_escaped
 from http import HTTPStatus
-from typing import Callable, List, Union
+from typing import Callable, Union
 
 from django.conf import settings
 from django.http import HttpRequest, HttpResponse
@@ -17,8 +17,146 @@ VALIDATION_HEADER = "X-Django-HTML-XML-Validation"
 _HTML5_BYTES_PATTERN = rb"^\s*<\s*!doctype\s+html>"
 _HTML5_BYTES_REGEX = re.compile(_HTML5_BYTES_PATTERN, re.IGNORECASE)
 _HTML5_REGEX = re.compile(_HTML5_BYTES_PATTERN.decode("ascii"), re.IGNORECASE)
-_HTML5_INVALID_TAG_TO_IGNORE_REGEX = re.compile(
-    r"^Tag (article|aside|details|figure|figcaption|footer|header|main|mark|nav|section|summary|time) invalid$"
+_MATH_ML_TAGS = {
+    "math",
+    "maction",
+    "maligngroup",
+    "malignmark",
+    "menclose",
+    "merror",
+    "mfenced",
+    "mfrac",
+    "mglyph",
+    "mi",
+    "mlabeledtr",
+    "mlongdiv",
+    "mmultiscripts",
+    "mn",
+    "mo",
+    "mover",
+    "mpadded",
+    "mphantom",
+    "mprescripts",
+    "mroot",
+    "mrow",
+    "ms",
+    "mscarries",
+    "mscarry",
+    "msgroup",
+    "msline",
+    "mspace",
+    "msqrt",
+    "msrow",
+    "mstack",
+    "mstyle",
+    "msub",
+    "msubsup",
+    "msup",
+    "mtable",
+    "mtd",
+    "mtext",
+    "mtr",
+    "munder",
+    "munderover",
+    "none",
+    "semantics",
+    "annotation",
+    "annotation-xml",
+}
+_SVG_TAGS = {
+    "a",
+    "animate",
+    "animateMotion",
+    "animateTransform",
+    "audio",
+    "canvas",
+    "circle",
+    "clipPath",
+    "defs",
+    "desc",
+    "discard",
+    "ellipse",
+    "feBlend",
+    "feColorMatrix",
+    "feComponentTransfer",
+    "feComposite",
+    "feConvolveMatrix",
+    "feDiffuseLighting",
+    "feDisplacementMap",
+    "feDistantLight",
+    "feDropShadow",
+    "feFlood",
+    "feFuncA",
+    "feFuncB",
+    "feFuncG",
+    "feFuncR",
+    "feGaussianBlur",
+    "feImage",
+    "feMerge",
+    "feMergeNode",
+    "feMorphology",
+    "feOffset",
+    "fePointLight",
+    "feSpecularLighting",
+    "feSpotLight",
+    "feTile",
+    "feTurbulence",
+    "filter",
+    "foreignObject",
+    "g",
+    "iframe",
+    "image",
+    "line",
+    "linearGradient",
+    "marker",
+    "mask",
+    "mesh",
+    "meshgradient",
+    "meshpatch",
+    "meshrow",
+    "metadata",
+    "mPath",
+    "path",
+    "pattern",
+    "polygon",
+    "polyline",
+    "radialGradient",
+    "rect",
+    "script",
+    "set",
+    "stop",
+    "style",
+    "svg",
+    "switch",
+    "symbol",
+    "text",
+    "textPath",
+    "title",
+    "tspan",
+    "unknown",
+    "use",
+    "video",
+    "view",
+}
+_SEMANTIC_TAGS = {
+    "article",
+    "aside",
+    "bdi",
+    "details",
+    "figure",
+    "figcaption",
+    "footer",
+    "header",
+    "main",
+    "mark",
+    "nav",
+    "section",
+    "summary",
+    "time",
+}
+_HTML5_INVALID_TAGS_TO_IGNORE = sorted(_MATH_ML_TAGS | _SEMANTIC_TAGS | _SVG_TAGS)
+_HTML5_INVALID_TAGS_TO_IGNORE_REGEX = re.compile(
+    rf"^Tag ({'|'.join(_HTML5_INVALID_TAGS_TO_IGNORE)}) invalid$", re.IGNORECASE
 )
 
 
@@ -103,16 +241,16 @@ class HtmlXmlValidatorMiddleware:
         return response.content.decode(response.charset)
 
     @staticmethod
-    def _cleaned_errors(parser: Union[etree.HTMLParser, etree.XMLParser], is_html5: bool) -> List:
+    def _cleaned_errors(parser: Union[etree.HTMLParser, etree.XMLParser], is_html5: bool) -> list:
         # HACK: Filter spurious HTML5 errors caused by libxml2 not knowing about them.
         return [
             error
             for error in parser.error_log.filter_from_warnings()
-            if not is_html5 or _HTML5_INVALID_TAG_TO_IGNORE_REGEX.match(error.message) is None
+            if not is_html5 or _HTML5_INVALID_TAGS_TO_IGNORE_REGEX.match(error.message) is None
         ]
 
     @staticmethod
-    def _errors_html(markup_language: str, content_text: str, errors: List) -> str:
+    def _errors_html(markup_language: str, content_text: str, errors: list) -> str:
         content_lines = content_text.split("\n")
         error_log_html = "".join(error_line_html(error, content_lines) for error in errors)
         return "".join(
@@ -147,7 +285,7 @@ class HtmlXmlValidatorMiddleware:
         )
 
 
-def error_line_html(error, content_lines: List[str]) -> str:
+def error_line_html(error, content_lines: list[str]) -> str:
     if error.line:
         content_line = content_lines[error.line - 1]
         content_line_without_leading_white_space = content_line.lstrip()

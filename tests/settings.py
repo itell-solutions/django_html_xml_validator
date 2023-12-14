@@ -1,14 +1,14 @@
-from typing import Any, Dict, List
+from typing import Any
 
 SECRET_KEY = "NOT-A-SECRET"
 
-ALLOWED_HOSTS: List[str] = []
+ALLOWED_HOSTS: list[str] = []
 
-DATABASES: Dict[str, Dict[str, Any]] = {}
+DATABASES: dict[str, dict[str, Any]] = {}
 
 INSTALLED_APPS = []
 
-MIDDLEWARE: List[str] = []
+MIDDLEWARE: list[str] = []
 
 TEMPLATES = [
     {
