@@ -141,6 +141,7 @@ _SVG_TAGS = {
 _SEMANTIC_TAGS = {
     "article",
     "aside",
+    "bdi",
     "details",
     "figure",
     "figcaption",
